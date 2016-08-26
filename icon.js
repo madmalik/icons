@@ -85,8 +85,8 @@ function create_circle(x, y, r, fill) {
 
 function paint_camera(svg, size) {
     var s = Math.floor(size) - 1;
-    var top = Math.ceil(interp(s, 0.1, 0.25)*s);
-    var bottom = Math.ceil(interp(s, 0.925, 0.85)*s);
+    var top = Math.ceil(interp(s, 0.175, 0.4)*s);
+    var bottom = s; Math.ceil(interp(s, 0.925, 0.85)*s);
     var top2 = top + Math.round(s/15);
 
     var lense_r = 0.2*s;
