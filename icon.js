@@ -55,6 +55,9 @@ function create_path(p, fill, thickness) {
   outline.setAttribute("stroke-width", thickness);
   outline.setAttribute("stroke-linecap", "round")
   outline.setAttribute("stroke-linejoin", "round")
+
+  outline.setAttribute("class", "icon")
+
   return outline;
 
 }
@@ -78,6 +81,9 @@ function create_circle(x, y, r, fill) {
   
   outline.setAttribute('stroke', "#000");
   outline.setAttribute('stroke-width', 1);    
+
+  outline.setAttribute("class", "icon")
+  
   return outline;
 
 }
@@ -168,7 +174,6 @@ function paint_camera(svg, size) {
           ["M", 4, a + 4],
           ["L", 4, b - 4],
       ], 'none', 0.5));
-
       svg.appendChild(create_path([
           ["M", s-4, a + 4],
           ["L", s-4, b - 4],
