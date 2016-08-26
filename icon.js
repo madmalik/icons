@@ -83,7 +83,7 @@ function create_circle(x, y, r, fill) {
   outline.setAttribute('stroke-width', 1);    
 
   outline.setAttribute("class", "icon")
-  
+
   return outline;
 
 }
@@ -201,8 +201,8 @@ function paint_camera(svg, size) {
 
 function paint_file(svg, size) {
     var s = Math.floor(size) - 1;
-    var a = Math.floor(s*(1 - 5/7) / 2);
-    var b = Math.floor(s - s*(1 - 5/7) / 2);
+    var a = 0;
+    var b = Math.ceil(s - s*(1 - 5/7));
 
     c = Math.ceil(s * interp(s, 0.3, 0.2))
     svg.appendChild(create_path([
