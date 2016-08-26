@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    <style type="text/css">
+body {
+  background-color: white;
+}
+#wrapper {
+  max-width: 700px;
+  font-size: 1.25em;
+}
+.dropcap {
+  color: red;
+  float: left;
+  font-style: italic;
+  /*-webkit-shape-outside: polygon(0 0, 100% 100%, 0 100%);*/
+  
+}
+
+.one {
+  float: left;
+  width: 20px;
+  height: 1em;
+}
+.two {
+  float: left;
+  clear: left;
+
+  width: 10px;
+  height: 1em;
+}
+
+    </style>
+  </head>
+  <body>
+    <div id="wrapper" class="dropcapped">Iorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </div>
+    </div class="wrapper"><span class="one"></span><span class="two"></span>
+Iorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </div>
+
+
+
+  </body>
+
+  <script>
+
+r(function(){
+  var dropcaps = document.getElementsByClassName("dropcapped");
+  var i;
+  for (i = 0; i < dropcaps.length; i++) {
+    var text_style = window.getComputedStyle(dropcaps[i]);
+
+    innerHTML = dropcaps[i].innerHTML;
+    dropcaps[i].innerHTML = innerHTML.replace(/^[^a-zA-Z]*([a-zA-Z])/g, '<span class="dropcap">$1</span>');
+
+
+    var cap_span = dropcaps[i].firstChild;
+    var cap_char = cap_span.innerHTML;
+    var cap_font = window.getComputedStyle(cap_span).fontFamily;
+    var cap_font_style = window.getComputedStyle(cap_span).fontStyle;
+    var cap_font_weight = window.getComputedStyle(cap_span).fontWeight;
+
+    console.log(window.getComputedStyle(cap_span));
+
+    var cap_line_size = 3; // in lines
+
+    console.log(cap_font);
+
+
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext("2d");
+    var w = 40;
+    var h = 40;
+    canvas.weight = w;
+    canvas.height = h;
+
+
+    ctx.fillStyle = 'black';
+    ctx.font = cap_font_style + ' ' + cap_font_weight + ' ' +  h + "px " + cap_font;
+    ctx.fillText(cap_char, 0, h);
+
+    var img = ctx.getImageData(0, 0, w, h).data;
+
+    var cap_height = 0;
+    var blub = 0;
+    var j;
+    for (j = 3; j < w * h * 4; j += 4) { // we only look at the alpha channel
+      if (img[j] != 0) {
+        blub = j % w; 
+        cap_height = j / h / 4
+        break;
+      }
+    } 
+
+    function offset_from_right(height) {
+      var offset = w * 4 * Math.round(height);
+      var j;
+      for (j = (w-1) * 4 + 3; j > 0 ; j -= 4) { // we only look at the alpha channel
+        if (img[j + offset] != 0) {
+          return  j / 4 + 0.25;
+        }
+      }
+      return 0;
+    }
+
+    var line_offsets = [];
+    var j;
+    var d = 0.1
+    for (j = cap_height + d; j <= h; j += (h - cap_height - 2*d) / cap_line_size ) {
+      var scanline_h = Math.round(j);
+      if (scanline_h >= h) {
+        scanline_h = h - 1;
+      }
+      line_offsets.push(offset_from_right(scanline_h));
+      console.log(offset_from_right(scanline_h),scanline_h);
+      ctx.fillRect(offset_from_right(scanline_h),scanline_h-1,5,2);
+    }
+
+    // size the drop cap
+    var text_line_height = parseInt(text_style.fontSize, 10);
+
+    var cap_font_size = Math.round(cap_line_size * text_line_height * h / (h - cap_height));
+    cap_span.style.fontSize = cap_font_size + 'px';
+    cap_span.style.marginTop = -Math.round(cap_height / h * cap_font_size / 2) + 'px'
+    
+    cap_span.style.shapeOutside = []; // outside_poly + '0, 0)';
+
+  }
+
+});
+
+
+function r(f){/in/.test(document.readyState)?setTimeout('r('+f+')',9):f()}
+
+  </script>
+
+</html>
